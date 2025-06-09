@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  ADD_FILM,
-  addFavourite,
-  seriesFetch,
-  toggleButton,
-} from "../redux/action";
+// import {
+//   ADD_FILM,
+//   addFavourite,
+//   seriesFetch,
+//   toggleButton,
+// } from "../redux/action";
+import { seriesFetch } from "../redux/action";
 import { useNavigate } from "react-router-dom";
-import { StarFill } from "react-bootstrap-icons";
 
 function Film() {
   const dispatch = useDispatch();
@@ -22,24 +22,24 @@ function Film() {
     navigate(`/${routeType}/${value}`, { state: item });
   };
 
-  const show = useSelector((state) => state.toggle.show);
+  // const show = useSelector((state) => state.toggle.show);
 
-  const addFavourites = (movie) => {
-    const media_type = movie.media_type
-      ? movie.media_type
-      : movie.name
-      ? "serie"
-      : "film";
+  // const addFavourites = (movie) => {
+  //   const media_type = movie.media_type
+  //     ? movie.media_type
+  //     : movie.name
+  //     ? "serie"
+  //     : "film";
 
-    dispatch(addFavourite({ ...movie, media_type }));
-  };
+  //   dispatch(addFavourite({ ...movie, media_type }));
+  // };
 
-  const handleClose = () => {
-    dispatch(toggleButton(false));
-  };
-  const handleOpen = () => {
-    dispatch(toggleButton(true));
-  };
+  // const handleClose = () => {
+  //   dispatch(toggleButton(false));
+  // };
+  // const handleOpen = () => {
+  //   dispatch(toggleButton(true));
+  // };
 
   const URL =
     "https://api.themoviedb.org/3/discover/tv?with_keywords=180547&language=it-IT&page=1";
@@ -58,17 +58,20 @@ function Film() {
       <Row>
         {series.results?.map((item, index) => (
           <Col xs={12} sm={6} md={4} lg={3} key={index}>
-            <Card
+            {/* <Card
               className="d-flex flex-column border-0 my-2"
               style={{
                 minHeight: "400px",
               }}
-            >
-              <Card.Img
-                variant="top"
-                src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
-              />
-              <Card.Body className="d-flex flex-column justify-content-between">
+            > */}
+            <Card.Img
+              onClick={() => handleClick(item.name.replace(/\s+/g, "_"), item)}
+              style={{ cursor: "pointer" }}
+              className="my-2 rounded img-fluid zoom-on-hover"
+              variant="top"
+              src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
+            />
+            {/* <Card.Body className="d-flex flex-column justify-content-between">
                 <Card.Title className="text-center">{item.name}</Card.Title>
                 <Card.Text
                   className="text-center"
@@ -101,12 +104,12 @@ function Film() {
                     <StarFill />
                   </Button>
                 </div>
-              </Card.Body>
-            </Card>
+              </Card.Body> */}
+            {/* </Card> */}
           </Col>
         ))}
       </Row>
-      <Modal show={show} onHide={handleClose}>
+      {/* <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Film</Modal.Title>
         </Modal.Header>
@@ -119,7 +122,7 @@ function Film() {
             Save Changes
           </Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> */}
     </Container>
   );
 }
