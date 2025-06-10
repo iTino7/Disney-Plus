@@ -14,7 +14,7 @@ function MyNavBar() {
   };
 
   return (
-    <Navbar expand="lg" className="d-flex">
+    <Navbar expand="lg" className="d-flex z-1">
       <Container fluid>
         <NavLink to={"/"}>
           <img src="/src/assets/logo.png" width={100} alt="" className="me-2" />
