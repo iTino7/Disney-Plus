@@ -1,12 +1,7 @@
-import React, { useEffect } from "react";
-import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
+import { useEffect } from "react";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-// import {
-//   ADD_FILM,
-//   addFavourite,
-//   seriesFetch,
-//   toggleButton,
-// } from "../redux/action";
+
 import { seriesFetch } from "../redux/action";
 import { useNavigate } from "react-router-dom";
 
@@ -22,25 +17,6 @@ function Film() {
     navigate(`/${routeType}/${value}`, { state: item });
   };
 
-  // const show = useSelector((state) => state.toggle.show);
-
-  // const addFavourites = (movie) => {
-  //   const media_type = movie.media_type
-  //     ? movie.media_type
-  //     : movie.name
-  //     ? "serie"
-  //     : "film";
-
-  //   dispatch(addFavourite({ ...movie, media_type }));
-  // };
-
-  // const handleClose = () => {
-  //   dispatch(toggleButton(false));
-  // };
-  // const handleOpen = () => {
-  //   dispatch(toggleButton(true));
-  // };
-
   const URL =
     "https://api.themoviedb.org/3/discover/tv?with_keywords=180547&language=it-IT&page=1";
   const TOKEN_API =
@@ -53,17 +29,11 @@ function Film() {
   console.log(series);
 
   return (
-    <Container>
+    <Container fluid>
       <h1 className="text-white text-center my-3">Serie</h1>
       <Row>
         {series.results?.map((item, index) => (
           <Col xs={12} sm={6} md={4} lg={3} key={index}>
-            {/* <Card
-              className="d-flex flex-column border-0 my-2"
-              style={{
-                minHeight: "400px",
-              }}
-            > */}
             <Card.Img
               onClick={() => handleClick(item.name.replace(/\s+/g, "_"), item)}
               style={{ cursor: "pointer" }}
@@ -71,58 +41,9 @@ function Film() {
               variant="top"
               src={`https://image.tmdb.org/t/p/w500${item.backdrop_path}`}
             />
-            {/* <Card.Body className="d-flex flex-column justify-content-between">
-                <Card.Title className="text-center">{item.name}</Card.Title>
-                <Card.Text
-                  className="text-center"
-                  style={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: 4,
-                    WebkitBoxOrient: "vertical",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    maxHeight: "6em",
-                  }}
-                >
-                  {item.overview}
-                </Card.Text>
-                <div className="d-flex">
-                  <Button
-                    className="w-100 me-2"
-                    variant="warning"
-                    onClick={() => handleClick(item.id, item)}
-                  >
-                    Info
-                  </Button>
-                  <Button
-                    variant="outline-warning"
-                    onClick={() => {
-                      addFavourites(item);
-                      handleOpen();
-                    }}
-                  >
-                    <StarFill />
-                  </Button>
-                </div>
-              </Card.Body> */}
-            {/* </Card> */}
           </Col>
         ))}
       </Row>
-      {/* <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Film</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>La serie è stata aggiunta alla tua lista!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
     </Container>
   );
 }

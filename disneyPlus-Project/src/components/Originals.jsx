@@ -47,7 +47,7 @@ function Originals() {
   }, [dispatch]);
 
   return (
-    <Container>
+    <Container fluid>
       <h1 className="text-white text-center my-3">Originals</h1>
       <Row>
         {originals.results?.map((item, index) => (

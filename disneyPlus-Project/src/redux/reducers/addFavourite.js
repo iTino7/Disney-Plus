@@ -1,7 +1,7 @@
-import { ADD_FILM } from "../action";
+import { ADD_FILM, REMOVE_FILM } from "../action";
 
 const initialState = {
-  list: JSON.parse(localStorage.getItem("myList")) || [],
+  list: [],
 };
 
 const favouritesReducers = (state = initialState, action) => {
@@ -14,14 +14,18 @@ const favouritesReducers = (state = initialState, action) => {
       }
 
       const updatedList = [...state.list, action.payload];
-      localStorage.setItem("myList", JSON.stringify(updatedList));
 
       return {
         ...state,
         list: updatedList,
       };
     }
-
+    case REMOVE_FILM: {
+      return {
+        ...state,
+        list: state.list.filter((movie) => movie.id !== action.payload),
+      };
+    }
     default:
       return state;
   }
