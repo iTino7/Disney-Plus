@@ -10,10 +10,6 @@ import {
 import { useNavigate } from "react-router-dom";
 
 function Cerca() {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-  };
-
   const [searchInput, setSearchInput] = useState("");
   const [search, setSearch] = useState([]);
 
@@ -44,6 +40,11 @@ function Cerca() {
   useEffect(() => {
     findSearch();
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    findSearch();
+  };
 
   console.log(search);
 
@@ -94,87 +95,113 @@ function Cerca() {
         </Form>
       </Container>
       <Container fluid className="text-white mt-5">
-        <Row>
-          <h3 className="mt-4 ms-4">Captain America</h3>
-          {capAmerica.results
-            ?.slice(0, 6)
-            .filter((item) => {
-              if (item.release_date) {
-                const annoRilascio = years(item.release_date);
-                return annoRilascio > 2010;
-              }
-              return false;
-            })
-            .map((item, index) => (
+        {search.length > 0 ? (
+          <Row>
+            <h3 className="mt-4 ms-4">Risultati per: "{searchInput}"</h3>
+            {search.map((item, index) => (
               <Col key={index} xs={12} md={3}>
                 <Card.Img
                   onClick={() =>
-                    handleClick(item.title.replace(/\s+/g, "_"), item)
+                    handleClick(
+                      (item.title || item.name).replace(/\s+/g, "_"),
+                      item
+                    )
                   }
                   style={{ cursor: "pointer" }}
                   className="my-2 rounded pointer img-fluid zoom-on-hover"
                   variant="top"
-                  src={`https://image.tmdb.org/t/p/w500${
+                  src={`https://image.tmdb.org/t/p/original${
                     item.backdrop_path || item.poster_path
                   }`}
                 />
               </Col>
             ))}
-        </Row>
-        <Row>
-          <h3 className="mt-4 ms-4">Spider man</h3>
-          {spiderman.results
-            ?.slice(12, 16)
-            .filter((item) => {
-              if (item.release_date) {
-                const annoRilascio = years(item.release_date);
-                return annoRilascio > 2000;
-              }
-              return false;
-            })
-            .map((item, index) => (
-              <Col key={index} xs={12} md={3}>
-                <Card.Img
-                  onClick={() =>
-                    handleClick(item.title.replace(/\s+/g, "_"), item)
+          </Row>
+        ) : (
+          <>
+            <Row>
+              <h3 className="mt-4 ms-4">Captain America</h3>
+              {capAmerica.results
+                ?.slice(0, 6)
+                .filter((item) => {
+                  if (item.release_date) {
+                    const annoRilascio = years(item.release_date);
+                    return annoRilascio > 2010;
                   }
-                  style={{ cursor: "pointer" }}
-                  className="my-2 rounded pointer img-fluid zoom-on-hover"
-                  variant="top"
-                  src={`https://image.tmdb.org/t/p/w500${
-                    item.backdrop_path || item.poster_path
-                  }`}
-                />
-              </Col>
-            ))}
-        </Row>
-        <Row>
-          <h3 className="mt-4 ms-4">Iron Man</h3>
-          {ironMan.results
-            ?.slice(4, 11)
-            .filter((item) => {
-              if (item.release_date) {
-                const annoRilascio = years(item.release_date);
-                return annoRilascio > 2007;
-              }
-              return false;
-            })
-            .map((item, index) => (
-              <Col key={index} xs={12} md={3}>
-                <Card.Img
-                  onClick={() =>
-                    handleClick(item.title.replace(/\s+/g, "_"), item)
+                  return false;
+                })
+                .map((item, index) => (
+                  <Col key={index} xs={12} md={3}>
+                    <Card.Img
+                      onClick={() =>
+                        handleClick(item.title.replace(/\s+/g, "_"), item)
+                      }
+                      style={{ cursor: "pointer" }}
+                      className="my-2 rounded pointer img-fluid zoom-on-hover"
+                      variant="top"
+                      src={`https://image.tmdb.org/t/p/w500${
+                        item.backdrop_path || item.poster_path
+                      }`}
+                    />
+                  </Col>
+                ))}
+            </Row>
+            <Row>
+              <h3 className="mt-4 ms-4">Spider man</h3>
+              {spiderman.results
+                ?.slice(12, 16)
+                .filter((item) => {
+                  if (item.release_date) {
+                    const annoRilascio = years(item.release_date);
+                    return annoRilascio > 2000;
                   }
-                  style={{ cursor: "pointer" }}
-                  className="my-2 rounded pointer img-fluid zoom-on-hover"
-                  variant="top"
-                  src={`https://image.tmdb.org/t/p/w500${
-                    item.backdrop_path || item.poster_path
-                  }`}
-                />
-              </Col>
-            ))}
-        </Row>
+                  return false;
+                })
+                .map((item, index) => (
+                  <Col key={index} xs={12} md={3}>
+                    <Card.Img
+                      onClick={() =>
+                        handleClick(item.title.replace(/\s+/g, "_"), item)
+                      }
+                      style={{ cursor: "pointer" }}
+                      className="my-2 rounded pointer img-fluid zoom-on-hover"
+                      variant="top"
+                      src={`https://image.tmdb.org/t/p/w500${
+                        item.backdrop_path || item.poster_path
+                      }`}
+                    />
+                  </Col>
+                ))}
+            </Row>
+            <Row>
+              <h3 className="mt-4 ms-4">Iron Man</h3>
+              {ironMan.results
+                ?.slice(4, 11)
+                .filter((item) => {
+                  if (item.release_date) {
+                    const annoRilascio = years(item.release_date);
+                    return annoRilascio > 2007;
+                  }
+                  return false;
+                })
+                .map((item, index) => (
+                  <Col key={index} xs={12} md={3}>
+                    <Card.Img
+                      onClick={() =>
+                        handleClick(item.title.replace(/\s+/g, "_"), item)
+                      }
+                      style={{ cursor: "pointer" }}
+                      className="my-2 rounded pointer img-fluid zoom-on-hover"
+                      variant="top"
+                      src={`https://image.tmdb.org/t/p/w500${
+                        item.backdrop_path || item.poster_path
+                      }`}
+                    />
+                  </Col>
+                ))}
+            </Row>
+          </>
+        )}
       </Container>
     </>
   );

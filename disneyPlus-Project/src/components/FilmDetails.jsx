@@ -134,7 +134,12 @@ function FilmDetails() {
         <Modal.Header closeButton>
           <Modal.Title>Film</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Il film è stato aggiunto alla tua lista!</Modal.Body>
+        <Modal.Body>
+          <p>
+            Il film è stato
+            {toggle[movie.id] ? " inserito nella lista!" : " rimosso dalla lista"}
+          </p>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close

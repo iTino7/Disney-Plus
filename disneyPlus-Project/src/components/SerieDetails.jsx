@@ -132,7 +132,14 @@ function SerieDetails() {
         <Modal.Header closeButton>
           <Modal.Title>Film</Modal.Title>
         </Modal.Header>
-        <Modal.Body>La Serie è stato aggiunta alla tua lista!</Modal.Body>
+        <Modal.Body>
+          <p>
+            La Serie è stata
+            {toggle[series.id]
+              ? " inserita alla tua lista"
+              : " rimossa dalla tua lista"}
+          </p>
+        </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
