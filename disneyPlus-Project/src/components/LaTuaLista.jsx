@@ -46,9 +46,11 @@ function LaTuaLista() {
             ))}
           </Row>
         ) : (
-          <p className="text-white mt-4  mb-0 ">
-            Nessun film o serie aggiunto ai preferiti
-          </p>
+          <Col>
+            <h4 className="text-white mt-4 ms-3 mb-0 ">
+              Nessun film o serie aggiunto ai preferiti
+            </h4>
+          </Col>
         )}
       </Row>
     </Container>

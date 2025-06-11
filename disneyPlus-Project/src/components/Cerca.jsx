@@ -107,7 +107,11 @@ function Cerca() {
                       item
                     )
                   }
-                  style={{ cursor: "pointer", height:"200px", objectFit:"contain" }}
+                  style={{
+                    cursor: "pointer",
+                    height: "200px",
+                    objectFit: "contain",
+                  }}
                   className="my-2 rounded pointer img-fluid zoom-on-hover"
                   variant="top"
                   src={`https://image.tmdb.org/t/p/original${
@@ -136,7 +140,11 @@ function Cerca() {
                       onClick={() =>
                         handleClick(item.title.replace(/\s+/g, "_"), item)
                       }
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        height: "200px",
+                        objectFit: "contain",
+                      }}
                       className="my-2 rounded pointer img-fluid zoom-on-hover"
                       variant="top"
                       src={`https://image.tmdb.org/t/p/w500${
@@ -163,7 +171,11 @@ function Cerca() {
                       onClick={() =>
                         handleClick(item.title.replace(/\s+/g, "_"), item)
                       }
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        height: "200px",
+                        objectFit: "contain",
+                      }}
                       className="my-2 rounded pointer img-fluid zoom-on-hover"
                       variant="top"
                       src={`https://image.tmdb.org/t/p/w500${
@@ -190,7 +202,11 @@ function Cerca() {
                       onClick={() =>
                         handleClick(item.title.replace(/\s+/g, "_"), item)
                       }
-                      style={{ cursor: "pointer" }}
+                      style={{
+                        cursor: "pointer",
+                        height: "200px",
+                        objectFit: "contain",
+                      }}
                       className="my-2 rounded pointer img-fluid zoom-on-hover"
                       variant="top"
                       src={`https://image.tmdb.org/t/p/w500${

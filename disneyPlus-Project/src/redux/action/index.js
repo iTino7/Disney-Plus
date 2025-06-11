@@ -8,6 +8,8 @@ export const SET_SPIDERMAN = "SET_SPIDERMAN";
 export const SET_IRONMAN = "SET_IRONMAN";
 export const SET_CAPAMERICA = "SET_CAPAMERICA";
 export const SET_TRAILER = "SET_TRAILER";
+export const SET_DELETE = "SET_DELETE";
+export const SET_HOMEFILM = "SET_HOMEFILM";
 
 export const toggleButton = (value) => ({
   type: TOGGLE_FILM,
@@ -120,6 +122,41 @@ export const trailerFetch = (token, id, genre) => {
       if (resp.ok) {
         const data = await resp.json();
         dispatch({ type: SET_TRAILER, payload: data });
+      } else {
+        throw new Error("errore nella fetch");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const homeFilmFetch = (url) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetch(url);
+      if (resp.ok) {
+        const data = await resp.json();
+        dispatch({ SET_HOMEFILM, payload: data });
+      } else {
+        throw new Error("errore nella fetch");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const deleteFilmFetch = async (url, id) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetch(url + id, {
+        method: "DELETE",
+      });
+      if (resp.ok) {
+        const data = await resp.json();
+        homeFilmFetch();
+        dispatch({ type: SET_DELETE, payload: data });
       } else {
         throw new Error("errore nella fetch");
       }
