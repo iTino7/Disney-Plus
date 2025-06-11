@@ -6,7 +6,7 @@ function Home() {
     <Container fluid className="mt-3">
       <Row>
         <Col>
-          <h4 className="text-white"> Scelti per te </h4>
+          <h4 className="text-white ms-3 mb-4"> Film </h4>
           <FilmForYou />
         </Col>
       </Row>

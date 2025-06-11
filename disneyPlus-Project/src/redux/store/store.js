@@ -5,6 +5,7 @@ import toggleReducers from "../reducers/toggleFilm";
 import seriesReducers from "../reducers/getSeries";
 import originalsReducers from "../reducers/getOriginals";
 import searchReducers from "../reducers/getSearch";
+import trailerReducers from "../reducers/getTrailer";
 
 const rootReducers = {
   movies: filmReducers,
@@ -13,6 +14,7 @@ const rootReducers = {
   series: seriesReducers,
   trend: originalsReducers,
   search: searchReducers,
+  trailer: trailerReducers,
 };
 
 const store = configureStore({

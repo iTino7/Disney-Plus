@@ -16,7 +16,7 @@ function Film() {
   };
 
   const URL =
-    "https://api.themoviedb.org/3/discover/movie?with_keywords=180547&language=it-IT&page=1";
+    "https://api.themoviedb.org/3/discover/movie?with_companies=2|3475|15935&without_companies=420|19551|38679|2301|13252&language=it-IT&page=1";
   const TOKEN_API =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMTc1YWEzMWQzZDk2ZDJkNjQwMzczODliZDAyNDc5ZCIsIm5iZiI6MTcxNzQwMzExMC45OTEwMDAyLCJzdWIiOiI2NjVkN2RlNjUxZmQ5OGZiNTcyMzI1MWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.s6W_nERiypsdOzk9jAF68sajHIuB2pshwNNghSa3Ax4";
 

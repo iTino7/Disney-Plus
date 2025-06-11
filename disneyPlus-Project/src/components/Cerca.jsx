@@ -107,7 +107,7 @@ function Cerca() {
                       item
                     )
                   }
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", height:"200px", objectFit:"contain" }}
                   className="my-2 rounded pointer img-fluid zoom-on-hover"
                   variant="top"
                   src={`https://image.tmdb.org/t/p/original${

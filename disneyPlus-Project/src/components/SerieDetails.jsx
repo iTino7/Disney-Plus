@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
 import { StarFill } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { addFavourite, REMOVE_FILM, toggleButton } from "../redux/action";
+import {
+  addFavourite,
+  REMOVE_FILM,
+  toggleButton,
+  trailerFetch,
+} from "../redux/action";
 
 function SerieDetails() {
   const dispatch = useDispatch();
@@ -14,6 +19,8 @@ function SerieDetails() {
     return stored ? JSON.parse(stored) : {};
   });
 
+  const trailer = useSelector((state) => state.trailer.trailer);
+
   const isFavourite = toggle[series.id] === true;
   console.log(isFavourite);
 
@@ -23,6 +30,16 @@ function SerieDetails() {
 
     return year;
   };
+
+  const TOKEN =
+    "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMTc1YWEzMWQzZDk2ZDJkNjQwMzczODliZDAyNDc5ZCIsIm5iZiI6MTcxNzQwMzExMC45OTEwMDAyLCJzdWIiOiI2NjVkN2RlNjUxZmQ5OGZiNTcyMzI1MWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.s6W_nERiypsdOzk9jAF68sajHIuB2pshwNNghSa3Ax4";
+
+  useEffect(() => {
+    dispatch(trailerFetch(TOKEN, series.id, "tv"));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  console.log(trailer);
 
   const removeFromFavourites = (movieId) => {
     dispatch({
@@ -48,6 +65,16 @@ function SerieDetails() {
   };
   const handleOpen = () => {
     dispatch(toggleButton(true));
+  };
+
+  const handleTrailer = () => {
+    if (trailer.results.length > 0) {
+      const reversedResults = [...trailer.results].reverse();
+      window.open(
+        `https://www.youtube.com/watch?v=${reversedResults[0].key}`,
+        "_blank"
+      );
+    }
   };
 
   return (
@@ -78,6 +105,14 @@ function SerieDetails() {
                       <Card.Title>
                         {series.name} - {years(series.first_air_date)}
                       </Card.Title>
+                      <Button
+                        onClick={() => {
+                          handleTrailer();
+                        }}
+                        className="mb-2 bg-transparent border-0"
+                      >
+                        Trailer
+                      </Button>
                       {!isFavourite ? (
                         <Button
                           className="border-0 bg-transparent"

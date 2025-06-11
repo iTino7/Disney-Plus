@@ -7,6 +7,7 @@ export const SET_ORIGINALS = "SET_ORIGINALS";
 export const SET_SPIDERMAN = "SET_SPIDERMAN";
 export const SET_IRONMAN = "SET_IRONMAN";
 export const SET_CAPAMERICA = "SET_CAPAMERICA";
+export const SET_TRAILER = "SET_TRAILER";
 
 export const toggleButton = (value) => ({
   type: TOGGLE_FILM,
@@ -96,6 +97,29 @@ export const searchFetch = (nameMovie, token, character) => {
       if (resp.ok) {
         const data = await resp.json();
         dispatch({ type: character, payload: data });
+      } else {
+        throw new Error("errore nella fetch");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const trailerFetch = (token, id, genre) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetch(
+        `https://api.themoviedb.org/3/${genre}/${id}/videos?language=it-IT`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (resp.ok) {
+        const data = await resp.json();
+        dispatch({ type: SET_TRAILER, payload: data });
       } else {
         throw new Error("errore nella fetch");
       }
