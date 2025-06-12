@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -8,13 +8,22 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import { DashCircle, Plus } from "react-bootstrap-icons";
+import { DashCircle, Pencil, Plus } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteFilmFetch, homeFilmFetch, toggleButton } from "../redux/action";
+import {
+  deleteFilmFetch,
+  homeFilmFetch,
+  toggleButton,
+  putFilmFetch,
+} from "../redux/action";
 
 function FilmForYou() {
   const show = useSelector((state) => state.toggle.show);
+  const dispatch = useDispatch();
+  const film = useSelector((state) => state.home.film);
+  const URL = "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie";
 
+  const [editId, setEditId] = useState(null);
   const [text, setText] = useState({
     title: "",
     year: "",
@@ -27,10 +36,45 @@ function FilmForYou() {
     bgImage: "",
   });
 
+  useEffect(() => {
+    dispatch(homeFilmFetch(URL));
+  }, [dispatch]);
+
+  const handleOpen = () => dispatch(toggleButton(true));
+  const handleClose = () => {
+    dispatch(toggleButton(false));
+    setEditId(null);
+    setText({
+      title: "",
+      year: "",
+      genre: "",
+      rating: 0,
+      description: "",
+      img: "",
+      isWatched: "",
+      logo: "",
+      bgImage: "",
+    });
+  };
+
+  const handleDelete = (id) => {
+    dispatch(deleteFilmFetch(URL, id));
+  };
+
+  const handleEdit = (edit) => {
+    setText(edit);
+    setEditId(edit.id);
+    dispatch(toggleButton(true));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("form inviato", text);
-    updateFetch();
+    if (editId) {
+      dispatch(putFilmFetch(URL, editId, text));
+    } else {
+      updateFetch();
+    }
+    handleClose();
   };
 
   const updateFetch = async () => {
@@ -44,48 +88,12 @@ function FilmForYou() {
       });
 
       if (resp.ok) {
-        setText({
-          title: "",
-          year: "",
-          genre: "",
-          rating: 0,
-          description: "",
-          img: "",
-          isWatched: "",
-          logo: "",
-          bgImage: "",
-        });
-
         dispatch(homeFilmFetch(URL));
-        handleClose();
       }
     } catch (error) {
       console.log("Errore durante il POST:", error);
     }
   };
-
-  const dispatch = useDispatch();
-
-  const handleClose = () => {
-    dispatch(toggleButton(false));
-  };
-  const handleOpen = () => {
-    dispatch(toggleButton(true));
-  };
-
-  const handleDelete = (id) => {
-    dispatch(deleteFilmFetch(URL, id));
-  };
-
-  const film = useSelector((state) => state.home.film);
-  console.log(film);
-  
-
-  const URL = "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie";
-
-  useEffect(() => {
-    dispatch(homeFilmFetch(URL));
-  }, [dispatch]);
 
   const onChange = (e) =>
     setText((old) => ({ ...old, [e.target.name]: e.target.value }));
@@ -100,10 +108,10 @@ function FilmForYou() {
                 <Col xs={12} className="d-flex">
                   <h1 className="text-white">Aggiungi Film</h1>
                   <Button
-                    onClick={() => handleOpen()}
+                    onClick={handleOpen}
                     className="bg-transparent border-0"
                   >
-                    <Plus className="fs-1 text-warning " />
+                    <Plus className="fs-1 text-warning" />
                   </Button>
                 </Col>
               ) : (
@@ -111,7 +119,7 @@ function FilmForYou() {
                   <div className="d-flex align-items-center">
                     <h4 className="text-white ms-3 mb-1">Film</h4>
                     <Button
-                      onClick={() => handleOpen()}
+                      onClick={handleOpen}
                       className="bg-transparent border-0 p-0"
                     >
                       <Plus className="fs-2 text-warning" />
@@ -148,6 +156,23 @@ function FilmForYou() {
                           >
                             <DashCircle className="fs-4 text-danger" />
                           </Button>
+                          <Button
+                            style={{
+                              position: "absolute",
+                              top: "8px",
+                              left: "8px",
+                              zIndex: 2,
+                              color: "white",
+                              fontWeight: "bold",
+                              backgroundColor: "rgba(0,0,0,0.6)",
+                              border: "none",
+                              borderRadius: "4px",
+                              padding: "2px 6px",
+                            }}
+                            onClick={() => handleEdit(item)}
+                          >
+                            <Pencil className="text-warning fs-5"/>
+                          </Button>
                         </div>
                       </Col>
                     ))}
@@ -155,9 +180,12 @@ function FilmForYou() {
                 </>
               )}
             </Row>
+
             <Modal size="lg" show={show} onHide={handleClose}>
               <Modal.Header closeButton>
-                <Modal.Title>Aggiungi un film</Modal.Title>
+                <Modal.Title>
+                  {editId ? "Modifica film" : "Aggiungi un film"}
+                </Modal.Title>
               </Modal.Header>
               <Modal.Body>
                 <Form onSubmit={handleSubmit}>
@@ -187,7 +215,7 @@ function FilmForYou() {
                         required
                         value={text.genre}
                         onChange={onChange}
-                        placeholder="genere"
+                        placeholder="Genere"
                         name="genre"
                       />
                     </Col>
@@ -197,47 +225,47 @@ function FilmForYou() {
                         required
                         value={text.rating}
                         onChange={onChange}
-                        placeholder="rating"
+                        placeholder="Rating"
                         name="rating"
                       />
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} className="mt-2">
                       <Form.Control
                         type="text"
                         required
-                        placeholder="Aggiungi la descrizione"
+                        placeholder="Descrizione"
                         value={text.description}
                         onChange={onChange}
                         name="description"
                       />
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} className="mt-2">
                       <Form.Control
                         type="text"
                         required
                         value={text.img}
                         onChange={onChange}
-                        placeholder="aggiungi url dell'immagine"
+                        placeholder="URL immagine"
                         name="img"
                       />
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} className="mt-2">
                       <Form.Control
                         type="text"
                         required
                         value={text.logo}
                         onChange={onChange}
-                        placeholder="aggiungi il logo"
+                        placeholder="Logo"
                         name="logo"
                       />
                     </Col>
-                    <Col xs={12} md={3}>
+                    <Col xs={12} md={3} className="mt-2">
                       <Form.Control
                         type="text"
                         required
                         value={text.bgImage}
                         onChange={onChange}
-                        placeholder="Aggiungi un'immagine di background..."
+                        placeholder="Immagine background"
                         name="bgImage"
                       />
                     </Col>
@@ -248,10 +276,10 @@ function FilmForYou() {
                       className="me-2"
                       onClick={handleClose}
                     >
-                      Close
+                      Chiudi
                     </Button>
                     <Button variant="primary" type="submit">
-                      Save Changes
+                      {editId ? "Salva Modifiche" : "Aggiungi"}
                     </Button>
                   </div>
                 </Form>

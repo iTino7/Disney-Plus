@@ -10,6 +10,7 @@ export const SET_CAPAMERICA = "SET_CAPAMERICA";
 export const SET_TRAILER = "SET_TRAILER";
 export const SET_DELETE = "SET_DELETE";
 export const SET_HOMEFILM = "SET_HOMEFILM";
+export const SET_PUT = "SET_PUT";
 
 export const setDelete = (id) => ({
   type: SET_DELETE,
@@ -166,3 +167,28 @@ export const deleteFilmFetch = (url, id) => {
   };
 };
 
+export const putFilmFetch = (url, id, updateData) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetch(`${url}/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updateData),
+      });
+      if (resp.ok) {
+        const updatedFilm = await resp.json();
+        dispatch({ type: SET_PUT, payload: updatedFilm });
+        dispatch(homeFilmFetch(url));
+      } else {
+        throw new Error("Errore nella PUT");
+      }
+      if (resp.ok) {
+        dispatch(homeFilmFetch(url));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
