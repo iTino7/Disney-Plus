@@ -1,4 +1,12 @@
-import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Modal,
+  Row,
+  Toast,
+} from "react-bootstrap";
 import { StarFill } from "react-bootstrap-icons";
 import { useLocation } from "react-router-dom";
 import {
@@ -161,27 +169,29 @@ function FilmDetails() {
           <h1 className="text-white">Film non trovato</h1>
         )}
       </Row>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Film</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            Il film è stato
-            {toggle[movie.id]
-              ? " inserito nella lista!"
-              : " rimosso dalla lista"}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Toast
+        show={show}
+        onClose={handleClose}
+        delay={3000}
+        autohide
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          zIndex: 9999,
+          minWidth: "250px",
+        }}
+      >
+        <Toast.Header closeButton>
+          <strong className="me-auto">Film</strong>
+        </Toast.Header>
+        <Toast.Body>
+          Il Film è stato
+          {toggle[movie.id]
+            ? " Inserito nella tua lista."
+            : " rimosso dalla tua lista."}
+        </Toast.Body>
+      </Toast>
     </Container>
   );
 }

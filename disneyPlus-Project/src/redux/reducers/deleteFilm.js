@@ -9,7 +9,7 @@ const removeFilmReducers = (state = initialState, action) => {
     case SET_DELETE: {
       return {
         ...state,
-        remove: action.payload,
+        remove: state.film.filter((movie) => movie.id !== action.payload),
       };
     }
     default:

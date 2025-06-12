@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Button, Card, Col, Container, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Modal,
+  Row,
+  Toast,
+} from "react-bootstrap";
 import { StarFill } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -18,6 +26,16 @@ function SerieDetails() {
     const stored = localStorage.getItem("serieToggles");
     return stored ? JSON.parse(stored) : {};
   });
+
+  // const [playVideo, setPlayVideo] = useState(false);
+
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     setPlayVideo(true);
+  //   }, 5000);
+
+  //   return () => clearTimeout(timer);
+  // }, []);
 
   const trailer = useSelector((state) => state.trailer.trailer);
 
@@ -83,22 +101,52 @@ function SerieDetails() {
         {series ? (
           <div
             style={{
-              position: "absolute",
-              left: "0",
-              right: "0",
-              bottom: "0",
-              top: "0%",
+              width: "100%",
+              height: "100%",
               backgroundImage: `linear-gradient(180deg,rgba(13, 13, 15, 1) 5%, rgba(255, 255, 255, 0) 56%, rgba(13, 13, 15, 1) 100%),url('https://image.tmdb.org/t/p/original${series.backdrop_path}')`,
               backgroundPosition: "top",
               backgroundSize: "cover",
               backgroundRepeat: "no-repeat",
+              position: "absolute",
+              top: "0",
+              right: "0",
+              left: "0",
+              bottom: "0",
             }}
           >
+            {/* {!playVideo ? (
+              <div
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundImage: `linear-gradient(180deg,rgba(13, 13, 15, 1) 5%, rgba(255, 255, 255, 0) 56%, rgba(13, 13, 15, 1) 100%),url('https://image.tmdb.org/t/p/original${series.backdrop_path}')`,
+                  backgroundPosition: "top",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></div>
+            ) : (
+              <video
+                src="/public/daredevil.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                }}
+              />
+            )} */}
             <Col>
               <Card className="d-flex border-0 bg-transparent text-white">
                 <Card.Body
                   className=" d-flex flex-column justify-content-end relative mt-5"
-                  style={{ height: "100vh" }}
+                  style={{ height: "100vh", zIndex: "2" }}
                 >
                   <Col xs={12} md={5}>
                     <div className="d-flex align-items-center">
@@ -163,27 +211,29 @@ function SerieDetails() {
           <h1 className="text-white">Serie non trovata</h1>
         )}
       </Row>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Film</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            La Serie è stata
-            {toggle[series.id]
-              ? " inserita alla tua lista"
-              : " rimossa dalla tua lista"}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <Toast
+        show={show}
+        onClose={handleClose}
+        delay={3000}
+        autohide
+        style={{
+          position: "fixed",
+          bottom: 20,
+          right: 20,
+          zIndex: 9999,
+          minWidth: "250px",
+        }}
+      >
+        <Toast.Header closeButton>
+          <strong className="me-auto">Serie</strong>
+        </Toast.Header>
+        <Toast.Body>
+          La serie è stata
+          {toggle[series.id]
+            ? " inserita alla tua lista."
+            : " rimossa dalla tua lista."}
+        </Toast.Body>
+      </Toast>
     </Container>
   );
 }

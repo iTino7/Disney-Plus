@@ -7,11 +7,10 @@ import {
   Form,
   Modal,
   Row,
-  Spinner,
 } from "react-bootstrap";
-import { Plus } from "react-bootstrap-icons";
+import { DashCircle, Plus } from "react-bootstrap-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { homeFilmFetch, toggleButton } from "../redux/action";
+import { deleteFilmFetch, homeFilmFetch, toggleButton } from "../redux/action";
 
 function FilmForYou() {
   const show = useSelector((state) => state.toggle.show);
@@ -36,16 +35,14 @@ function FilmForYou() {
 
   const updateFetch = async () => {
     try {
-      const resp = await fetch(
-        "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(text),
-        }
-      );
+      const resp = await fetch(URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(text),
+      });
+
       if (resp.ok) {
         setText({
           title: "",
@@ -58,10 +55,12 @@ function FilmForYou() {
           logo: "",
           bgImage: "",
         });
-        filmFetch();
+
+        dispatch(homeFilmFetch(URL));
+        handleClose();
       }
     } catch (error) {
-      console.log(error);
+      console.log("Errore durante il POST:", error);
     }
   };
 
@@ -74,29 +73,19 @@ function FilmForYou() {
     dispatch(toggleButton(true));
   };
 
-  const film = useSelector((state) => state.home.film);
+  const handleDelete = (id) => {
+    dispatch(deleteFilmFetch(URL, id));
+  };
 
-  const URL = "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie/";
+  const film = useSelector((state) => state.home.film);
+  console.log(film);
+  
+
+  const URL = "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie";
 
   useEffect(() => {
     dispatch(homeFilmFetch(URL));
-  }, []);
-
-  const deleteFilmFetch = async (id) => {
-    try {
-      const resp = await fetch(
-        "https://6844055971eb5d1be0322e55.mockapi.io/movie/movie/" + id,
-        { method: "DELETE" }
-      );
-      if (resp.ok) {
-        filmFetch();
-      } else {
-        throw new Error("errore");
-      }
-    } catch (error) {
-      <h1>{error}</h1>;
-    }
-  };
+  }, [dispatch]);
 
   const onChange = (e) =>
     setText((old) => ({ ...old, [e.target.name]: e.target.value }));
@@ -120,7 +109,7 @@ function FilmForYou() {
               ) : (
                 <>
                   <div className="d-flex align-items-center">
-                    <h4 className="text-white ms-3">Film</h4>
+                    <h4 className="text-white ms-3 mb-1">Film</h4>
                     <Button
                       onClick={() => handleOpen()}
                       className="bg-transparent border-0 p-0"
@@ -131,17 +120,35 @@ function FilmForYou() {
                   <Row>
                     {film.map((item, index) => (
                       <Col xs={12} sm={6} md={4} lg={3} key={index}>
-                        <Card.Img
-                          style={{
-                            cursor: "pointer",
-                            height: "200px",
-                            objectFit: "contain",
-                          }}
-                          className="my-2 rounded pointer img-fluid zoom-on-hover"
-                          variant="top"
-                          onClick={() => deleteFilmFetch(item.id)}
-                          src={item.img}
-                        />
+                        <div
+                          style={{ position: "relative", height: "200px" }}
+                          className="my-2"
+                        >
+                          <Card.Img
+                            style={{
+                              height: "100%",
+                              objectFit: "cover",
+                              width: "100%",
+                              borderRadius: "8px",
+                              cursor: "pointer",
+                            }}
+                            className="pointer img-fluid"
+                            variant="top"
+                            src={item.img}
+                          />
+                          <Button
+                            style={{
+                              position: "absolute",
+                              top: "8px",
+                              right: "8px",
+                              zIndex: 2,
+                            }}
+                            className="bg-transparent border-0 p-0 m-0"
+                            onClick={() => handleDelete(item.id)}
+                          >
+                            <DashCircle className="fs-4 text-danger" />
+                          </Button>
+                        </div>
                       </Col>
                     ))}
                   </Row>
@@ -169,7 +176,7 @@ function FilmForYou() {
                       <Form.Control
                         type="text"
                         value={text.year}
-                        onChange={onchange}
+                        onChange={onChange}
                         name="year"
                         placeholder="Anno del film..."
                       />

@@ -11,6 +11,11 @@ export const SET_TRAILER = "SET_TRAILER";
 export const SET_DELETE = "SET_DELETE";
 export const SET_HOMEFILM = "SET_HOMEFILM";
 
+export const setDelete = (id) => ({
+  type: SET_DELETE,
+  payload: id,
+});
+
 export const toggleButton = (value) => ({
   type: TOGGLE_FILM,
   payload: value,
@@ -137,31 +142,27 @@ export const homeFilmFetch = (url) => {
       const resp = await fetch(url);
       if (resp.ok) {
         const data = await resp.json();
-        dispatch({ SET_HOMEFILM, payload: data });
-      } else {
-        throw new Error("errore nella fetch");
+        dispatch({ type: SET_HOMEFILM, payload: data });
       }
     } catch (error) {
-      console.log(error);
+      console.log("Errore nella fetch dei film:", error);
     }
   };
 };
 
-export const deleteFilmFetch = async (url, id) => {
+export const deleteFilmFetch = (url, id) => {
   return async (dispatch) => {
     try {
-      const resp = await fetch(url + id, {
+      const resp = await fetch(`${url}/${id}`, {
         method: "DELETE",
       });
+
       if (resp.ok) {
-        const data = await resp.json();
-        homeFilmFetch();
-        dispatch({ type: SET_DELETE, payload: data });
-      } else {
-        throw new Error("errore nella fetch");
+        dispatch(homeFilmFetch(url));
       }
     } catch (error) {
-      console.log(error);
+      console.log("Errore durante la DELETE:", error);
     }
   };
 };
+
