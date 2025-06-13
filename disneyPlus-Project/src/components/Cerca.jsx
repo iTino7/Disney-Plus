@@ -5,48 +5,23 @@ import {
   SET_CAPAMERICA,
   SET_IRONMAN,
   SET_SPIDERMAN,
+  findFilmFetch,
   searchFetch,
 } from "../redux/action";
 import { useNavigate } from "react-router-dom";
 
 function Cerca() {
   const [searchInput, setSearchInput] = useState("");
-  const [search, setSearch] = useState([]);
+
+  const search = useSelector((state) => state.find.film);
 
   const TOKEN_API =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMTc1YWEzMWQzZDk2ZDJkNjQwMzczODliZDAyNDc5ZCIsIm5iZiI6MTcxNzQwMzExMC45OTEwMDAyLCJzdWIiOiI2NjVkN2RlNjUxZmQ5OGZiNTcyMzI1MWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.s6W_nERiypsdOzk9jAF68sajHIuB2pshwNNghSa3Ax4";
 
-  const findSearch = async () => {
-    try {
-      const resp = await fetch(
-        `https://api.themoviedb.org/3/search/movie?query=${searchInput}`,
-        {
-          headers: {
-            Authorization: `Bearer ${TOKEN_API}`,
-          },
-        }
-      );
-      if (resp.ok) {
-        const data = await resp.json();
-        setSearch(data.results);
-      } else {
-        throw new Error("errore nella fetch");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    findSearch();
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    findSearch();
+    dispatch(findFilmFetch(TOKEN_API, searchInput));
   };
-
-  console.log(search);
 
   const dispatch = useDispatch();
   const spiderman = useSelector((state) => state.search.spiderman);
@@ -67,13 +42,18 @@ function Cerca() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(capAmerica);
-
   const years = (value) => {
     const y = new Date(value);
     let year = y.getFullYear();
 
     return year;
+  };
+
+  const getYears = (release, year) => {
+    if (release) {
+      const annoRilascio = years(release);
+      return annoRilascio > year;
+    }
   };
 
   return (
@@ -127,13 +107,7 @@ function Cerca() {
               <h3 className="mt-4 ms-4">Captain America</h3>
               {capAmerica.results
                 ?.slice(0, 6)
-                .filter((item) => {
-                  if (item.release_date) {
-                    const annoRilascio = years(item.release_date);
-                    return annoRilascio > 2010;
-                  }
-                  return false;
-                })
+                .filter((item) => getYears(item.release_date, 2010))
                 .map((item, index) => (
                   <Col key={index} xs={12} md={3}>
                     <Card.Img
@@ -158,13 +132,7 @@ function Cerca() {
               <h3 className="mt-4 ms-4">Spider man</h3>
               {spiderman.results
                 ?.slice(12, 16)
-                .filter((item) => {
-                  if (item.release_date) {
-                    const annoRilascio = years(item.release_date);
-                    return annoRilascio > 2000;
-                  }
-                  return false;
-                })
+                .filter((item) => getYears(item.release_date, 2000))
                 .map((item, index) => (
                   <Col key={index} xs={12} md={3}>
                     <Card.Img
@@ -189,13 +157,7 @@ function Cerca() {
               <h3 className="mt-4 ms-4">Iron Man</h3>
               {ironMan.results
                 ?.slice(4, 11)
-                .filter((item) => {
-                  if (item.release_date) {
-                    const annoRilascio = years(item.release_date);
-                    return annoRilascio > 2007;
-                  }
-                  return false;
-                })
+                .filter((item) => getYears(item.release_date, 2007))
                 .map((item, index) => (
                   <Col key={index} xs={12} md={3}>
                     <Card.Img

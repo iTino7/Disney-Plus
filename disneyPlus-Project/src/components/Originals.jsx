@@ -18,7 +18,8 @@ function Originals() {
     navigate(`/${routeType}/${value}`, { state: item });
   };
 
-  const URL = "https://api.themoviedb.org/3/discover/movie?with_companies=25";
+  const URL =
+    "https://api.themoviedb.org/3/discover/movie?with_companies=25&language=it-IT";
   const TOKEN_API =
     "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjMTc1YWEzMWQzZDk2ZDJkNjQwMzczODliZDAyNDc5ZCIsIm5iZiI6MTcxNzQwMzExMC45OTEwMDAyLCJzdWIiOiI2NjVkN2RlNjUxZmQ5OGZiNTcyMzI1MWIiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.s6W_nERiypsdOzk9jAF68sajHIuB2pshwNNghSa3Ax4";
 

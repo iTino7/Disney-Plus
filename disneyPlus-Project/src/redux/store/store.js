@@ -9,6 +9,7 @@ import trailerReducers from "../reducers/getTrailer";
 import removeFilmReducers from "../reducers/deleteFilm";
 import filmHomeReducers from "../reducers/getHomeFilm";
 import putReducers from "../reducers/putFilm";
+import findFilmReducers from "../reducers/getFindFilm";
 
 const rootReducers = {
   movies: filmReducers,
@@ -21,6 +22,7 @@ const rootReducers = {
   remove: removeFilmReducers,
   home: filmHomeReducers,
   put: putReducers,
+  find: findFilmReducers,
 };
 
 const store = configureStore({

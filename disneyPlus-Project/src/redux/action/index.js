@@ -11,7 +11,13 @@ export const SET_TRAILER = "SET_TRAILER";
 export const SET_DELETE = "SET_DELETE";
 export const SET_HOMEFILM = "SET_HOMEFILM";
 export const SET_PUT = "SET_PUT";
+export const SET_LOADING = "SET_LOADING";
+export const SET_FIND = "SET_FIND";
 
+export const setLoading = (value) => ({
+  type: SET_LOADING,
+  payload: value,
+});
 export const setDelete = (id) => ({
   type: SET_DELETE,
   payload: id,
@@ -186,6 +192,29 @@ export const putFilmFetch = (url, id, updateData) => {
       }
       if (resp.ok) {
         dispatch(homeFilmFetch(url));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+export const findFilmFetch = (token, value) => {
+  return async (dispatch) => {
+    try {
+      const resp = await fetch(
+        `https://api.themoviedb.org/3/search/movie?query=${value}&language=it-IT`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (resp.ok) {
+        const data = await resp.json();
+        dispatch({ type: SET_FIND, payload: data });
+      } else {
+        throw new Error("errore nella fetch");
       }
     } catch (error) {
       console.log(error);

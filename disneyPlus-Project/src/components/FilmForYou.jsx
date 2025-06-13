@@ -126,7 +126,7 @@ function FilmForYou() {
                     </Button>
                   </div>
                   <Row>
-                    {film.map((item, index) => (
+                    {[...film].reverse().map((item, index) => (
                       <Col xs={12} sm={6} md={4} lg={3} key={index}>
                         <div
                           style={{ position: "relative", height: "200px" }}
@@ -134,7 +134,7 @@ function FilmForYou() {
                         >
                           <Card.Img
                             style={{
-                              height: "100%",
+                              height: "250px",
                               objectFit: "cover",
                               width: "100%",
                               borderRadius: "8px",
@@ -171,7 +171,7 @@ function FilmForYou() {
                             }}
                             onClick={() => handleEdit(item)}
                           >
-                            <Pencil className="text-warning fs-5"/>
+                            <Pencil className="text-warning fs-5" />
                           </Button>
                         </div>
                       </Col>
